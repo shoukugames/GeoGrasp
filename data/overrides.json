@@ -1,0 +1,107 @@
+{
+  "mergeInto": {
+    "Somaliland": "SOM",
+    "N. Cyprus": "CYP",
+    "Siachen Glacier": "IND",
+    "Kosovo": "UNK"
+  },
+  "decorContinent": {
+    "Indian Ocean Ter.": "oceania"
+  },
+  "continent": {
+    "TUR": "asia",
+    "CYP": "europe"
+  },
+  "extraPlayable": [
+    "TWN",
+    "UNK",
+    "PSE",
+    "GRL",
+    "VAT"
+  ],
+  "nameEn": {
+    "USA": "United States",
+    "GBR": "United Kingdom",
+    "COD": "DR Congo",
+    "COG": "Republic of the Congo",
+    "CAF": "Central African Republic"
+  },
+  "nameJa": {
+    "USA": "アメリカ",
+    "GBR": "イギリス",
+    "KOR": "韓国",
+    "PRK": "北朝鮮",
+    "COD": "コンゴ民主共和国",
+    "COG": "コンゴ共和国",
+    "TWN": "台湾",
+    "UNK": "コソボ"
+  },
+  "capitalEn": {
+    "ZAF": "Pretoria",
+    "BOL": "Sucre",
+    "NLD": "Amsterdam",
+    "MNG": "Ulaanbaatar",
+    "SMR": "San Marino"
+  },
+  "capitalJa": {
+    "ZAF": "プレトリア",
+    "BOL": "スクレ",
+    "NLD": "アムステルダム",
+    "TWN": "台北",
+    "UNK": "プリシュティナ",
+    "PSE": "ラマッラ",
+    "GRL": "ヌーク",
+    "VAT": "バチカン",
+    "ATG": "セントジョンズ",
+    "DNK": "コペンハーゲン",
+    "GNQ": "マラボ",
+    "NRU": "ヤレン",
+    "JPN": "東京",
+    "CHN": "北京",
+    "PRK": "平壌",
+    "BEL": "ブリュッセル",
+    "SMR": "サンマリノ"
+  },
+  "capitalLL": {
+    "GNQ": [
+      8.78,
+      3.75
+    ],
+    "TWN": [
+      121.56,
+      25.03
+    ],
+    "UNK": [
+      21.17,
+      42.66
+    ],
+    "PSE": [
+      35.2,
+      31.9
+    ],
+    "GRL": [
+      -51.72,
+      64.18
+    ],
+    "ZAF": [
+      28.19,
+      -25.75
+    ],
+    "BOL": [
+      -65.26,
+      -19.04
+    ],
+    "NLD": [
+      4.9,
+      52.37
+    ],
+    "ATG": [
+      -61.85,
+      17.12
+    ],
+    "DNK": [
+      12.57,
+      55.68
+    ]
+  }
+}

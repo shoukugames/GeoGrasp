@@ -1,0 +1,211 @@
+<!doctype html>
+<!-- GeoGrasp v0.1.0 — Copyright (C) 2026 Shawn Rapaz — GPL-3.0-or-later -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob: mediastream:; connect-src 'self' data: blob:; worker-src 'self' blob:; font-src 'self'">
+  <title>GeoGrasp</title>
+  <link rel="icon" href="icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="vendor/d3-array.min.js"></script>
+  <script src="vendor/d3-geo.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <div id="stage-wrap"><canvas id="stage"></canvas></div>
+  <video id="cam-video" playsinline muted></video>
+
+  <!-- ===================== TITLE ===================== -->
+  <section id="title" class="screen">
+    <div class="title-top">
+      <div class="seg lang-seg" role="group" aria-label="Language">
+        <button data-lang="en">English</button>
+        <button data-lang="ja">日本語</button>
+      </div>
+      <button class="icon-btn" id="btn-fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      <button class="icon-btn" id="btn-quit" data-i18n-title="quit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v8"/><path d="M6.3 7.2a8 8 0 1 0 11.4 0"/></svg></button>
+    </div>
+
+    <div class="title-menu">
+      <div class="logo">
+        <svg viewBox="0 0 64 64" class="logo-globe" aria-hidden="true">
+          <defs>
+            <radialGradient id="lg" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#7fe0ff"/><stop offset="1" stop-color="#1769b8"/></radialGradient>
+          </defs>
+          <circle cx="32" cy="32" r="28" fill="url(#lg)"/>
+          <path d="M14 22c6 2 8-3 13-1s3 8 8 8 6-6 10-4 4 9 1 13-9 3-11 8-7 7-10 3-1-8-6-10-7-6-5-17z" fill="#8be28b" opacity=".95"/>
+          <ellipse cx="32" cy="32" rx="28" ry="11" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+          <ellipse cx="32" cy="32" rx="12" ry="28" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="28" fill="none" stroke="#fff" stroke-width="2.5"/>
+        </svg>
+        <h1>Geo<span>Grasp</span></h1>
+      </div>
+      <p class="tagline" data-i18n="tagline"></p>
+
+      <div class="card play-card">
+        <div class="row-label" data-i18n="difficulty"></div>
+        <div class="seg diff-seg" role="group">
+          <button data-diff="easy"><span class="dot easy"></span><span data-i18n="easy"></span></button>
+          <button data-diff="medium"><span class="dot medium"></span><span data-i18n="medium"></span></button>
+          <button data-diff="hard"><span class="dot hard"></span><span data-i18n="hard"></span></button>
+        </div>
+        <p class="diff-desc" id="diff-desc"></p>
+        <div class="row-label region-label" data-i18n="region"></div>
+        <div class="chips" id="region-chips"></div>
+        <button class="big-btn" id="btn-play"><span>▶</span> <span data-i18n="play"></span></button>
+      </div>
+
+      <div class="menu-grid">
+        <button class="menu-tile" id="btn-capitals"><span class="tile-ico">🏛️</span><span class="tile-t" data-i18n="capitals"></span><span class="tile-d" data-i18n="capitalsDesc"></span></button>
+        <button class="menu-tile" id="btn-tutorial"><span class="tile-ico">🗺️</span><span class="tile-t" data-i18n="tutorial"></span><span class="tile-d" data-i18n="tutorialDesc"></span></button>
+        <button class="menu-tile" id="btn-parents"><span class="tile-ico">👪</span><span class="tile-t" data-i18n="parents"></span><span class="tile-d" data-i18n="parentsDesc"></span></button>
+        <button class="menu-tile" id="btn-credits"><span class="tile-ico">⭐</span><span class="tile-t" data-i18n="credits"></span><span class="tile-d">v0.1.0</span></button>
+      </div>
+    </div>
+
+    <div class="title-bottom">
+      <div class="settings">
+        <label><span>🎵</span><span data-i18n="music"></span><input type="range" min="0" max="1" step="0.05" id="vol-music"></label>
+        <label><span>🔔</span><span data-i18n="sound"></span><input type="range" min="0" max="1" step="0.05" id="vol-sfx"></label>
+        <label><span>🗣️</span><span data-i18n="voice"></span><input type="range" min="0" max="1" step="0.05" id="vol-voice"></label>
+      </div>
+      <div class="control-box">
+        <span class="row-label" data-i18n="control"></span>
+        <div class="seg ctl-seg">
+          <button data-ctl="hands">✋ <span data-i18n="ctlHands"></span></button>
+          <button data-ctl="mouse">🖱️ <span data-i18n="ctlMouse"></span></button>
+        </div>
+      </div>
+      <div class="ages">👶 <span data-i18n="ages"></span></div>
+    </div>
+  </section>
+
+  <!-- ===================== GAME HUD ===================== -->
+  <section id="hud" class="screen hidden">
+    <button class="icon-btn hud-back" id="hud-back" data-i18n-title="back">⟵</button>
+    <div class="hud-banner" id="hud-banner">
+      <div class="hud-title" id="hud-title"></div>
+      <div class="hud-sub" id="hud-sub"></div>
+    </div>
+    <button class="icon-btn hud-replay" id="hud-replay" data-i18n-title="replay">🔊</button>
+    <div class="hud-stats">
+      <div class="timer" id="hud-timer"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" class="tr-bg"/><circle cx="20" cy="20" r="17" class="tr-fg" id="hud-timer-ring"/></svg><span id="hud-timer-text">2:00</span></div>
+      <div class="hud-score"><small data-i18n="score"></small><b id="hud-score">0</b></div>
+      <div class="hud-progress" id="hud-progress"></div>
+    </div>
+    <div class="hud-flash" id="hud-flash"></div>
+  </section>
+
+  <!-- ===================== TUTORIAL UI ===================== -->
+  <section id="tut-ui" class="screen hidden">
+    <div class="tut-bar">
+      <button class="icon-btn" id="tut-back" data-i18n-title="back">⟵</button>
+      <div class="tut-head"><h2 data-i18n="tutTitle"></h2><p data-i18n="tutHint"></p></div>
+      <button class="icon-btn" id="tut-prev" data-i18n-title="prev">◀</button>
+      <button class="icon-btn" id="tut-next" data-i18n-title="next">▶</button>
+    </div>
+    <div class="chips tut-chips" id="tut-chips"></div>
+    <div class="info-card hidden" id="info-card">
+      <img id="info-flag" alt="">
+      <div class="info-name" id="info-name"></div>
+      <div class="info-alt" id="info-alt"></div>
+      <div class="info-row"><span>🏛️ <span data-i18n="capitalOf"></span></span><b id="info-cap"></b></div>
+      <div class="info-row"><span>🌍 <span data-i18n="continent"></span></span><b id="info-cont"></b></div>
+      <button class="small-btn" id="info-say">🔊 <span data-i18n="replay"></span></button>
+    </div>
+  </section>
+
+  <!-- flag card used in the capitals game -->
+  <div class="flag-card hidden" id="flag-card">
+    <img id="fc-flag" alt="">
+    <div class="fc-name" id="fc-name"></div>
+    <div class="fc-cap" id="fc-cap"></div>
+  </div>
+
+  <!-- camera preview -->
+  <div id="cam-box" class="hidden">
+    <canvas id="cam-preview" width="200" height="150"></canvas>
+    <div class="cam-msg" id="cam-msg"></div>
+  </div>
+
+  <!-- ===================== MODALS ===================== -->
+  <div class="modal-back hidden" id="modal-back"></div>
+
+  <div class="modal hidden" id="modal-gate" role="dialog" aria-modal="true">
+    <h2>🔒 <span data-i18n="gateTitle"></span></h2>
+    <p data-i18n="gateText"></p>
+    <div class="gate-q" id="gate-q"></div>
+    <input type="number" id="gate-a" inputmode="numeric" autocomplete="off">
+    <p class="gate-err" id="gate-err"></p>
+    <div class="modal-btns">
+      <button class="small-btn ghost" id="gate-cancel" data-i18n="cancel"></button>
+      <button class="small-btn" id="gate-ok" data-i18n="ok"></button>
+    </div>
+  </div>
+
+  <div class="modal cam-modal hidden" id="modal-camera" role="dialog" aria-modal="true">
+    <h2>📷 <span data-i18n="camTitle"></span></h2>
+    <p data-i18n="camText1"></p>
+    <ul class="cam-points">
+      <li class="hl">🔒 <span data-i18n="camText2"></span></li>
+      <li>📴 <span data-i18n="camText3"></span></li>
+      <li>🖱️ <span data-i18n="camText4"></span></li>
+    </ul>
+    <div class="modal-btns">
+      <button class="small-btn ghost" id="cam-deny" data-i18n="camDeny"></button>
+      <button class="small-btn" id="cam-allow" data-i18n="camAllow"></button>
+    </div>
+  </div>
+
+  <div class="modal panel hidden" id="panel-parents" role="dialog" aria-modal="true">
+    <div class="panel-head"><h2>👪 <span data-i18n="parentsTitle"></span></h2><button class="icon-btn" data-close data-i18n-title="close">✕</button></div>
+    <div class="panel-body" id="parents-body"></div>
+  </div>
+
+  <div class="modal panel hidden" id="panel-credits" role="dialog" aria-modal="true">
+    <div class="panel-head"><h2>⭐ <span data-i18n="creditsTitle"></span></h2><button class="icon-btn" data-close data-i18n-title="close">✕</button></div>
+    <div class="panel-body credits-body">
+      <div class="credits-logo">Geo<span>Grasp</span></div>
+      <div class="credits-grid">
+        <div><span data-i18n="version"></span></div><div><b>v0.1.0</b></div>
+        <div><span data-i18n="released"></span></div><div><b>2026-11-09</b></div>
+        <div><span data-i18n="created"></span></div><div><b>Shawn Rapaz</b> <span data-i18n="with"></span> <b>Claude Code</b></div>
+        <div><span data-i18n="website"></span></div><div><a href="https://shoukugames.org/" target="_blank" rel="noopener">https://shoukugames.org/</a></div>
+        <div><span data-i18n="email"></span></div><div><a href="mailto:info@shoukugames.org">info@shoukugames.org</a></div>
+        <div><span data-i18n="license"></span></div><div><b>GNU GPL v3.0</b></div>
+      </div>
+      <p class="license-text" data-i18n="licenseText"></p>
+      <p class="third" data-i18n="thirdParty"></p>
+      <p class="third" data-i18n="offline"></p>
+      <p class="copyright">© 2026 Shawn Rapaz · Shouku Games</p>
+    </div>
+  </div>
+
+  <div class="modal results hidden" id="modal-results" role="dialog" aria-modal="true">
+    <div class="res-stars" id="res-stars">⭐⭐⭐</div>
+    <h2 data-i18n="sessionDone"></h2>
+    <div class="res-grid">
+      <div><small data-i18n="score"></small><b id="res-score"></b></div>
+      <div><small data-i18n="correctN"></small><b id="res-right"></b></div>
+      <div><small data-i18n="wrongN"></small><b id="res-wrong"></b></div>
+      <div><small data-i18n="time"></small><b id="res-time"></b></div>
+    </div>
+    <div class="modal-btns">
+      <button class="small-btn ghost" id="res-home" data-i18n="home"></button>
+      <button class="small-btn" id="res-again" data-i18n="playAgain"></button>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="modal-pause" role="dialog" aria-modal="true">
+    <h2>⏸ <span data-i18n="paused"></span></h2>
+    <div class="modal-btns">
+      <button class="small-btn ghost" id="pause-home" data-i18n="home"></button>
+      <button class="small-btn" id="pause-resume" data-i18n="resume"></button>
+    </div>
+  </div>
+
+  <div id="loading" class="loading"><div class="spinner"></div><span>Loading… / よみこみちゅう…</span></div>
+  <canvas id="cursor-layer"></canvas>
+</body>
+</html>

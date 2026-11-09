@@ -1,0 +1,93 @@
+{
+  "name": "geograsp",
+  "productName": "GeoGrasp",
+  "version": "0.1.0",
+  "description": "Hand-tracking world geography puzzle game for kids (ages 6+). English & Japanese.",
+  "main": "electron/main.js",
+  "author": {
+    "name": "Shawn Rapaz",
+    "email": "info@shoukugames.org",
+    "url": "https://shoukugames.org/"
+  },
+  "homepage": "https://shoukugames.org/",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "devDependencies": {
+    "@mediapipe/tasks-vision": "^1.2.2",
+    "d3-array": "^3.2.5",
+    "d3-geo": "^3.1.2",
+    "electron": "^33.4.11",
+    "electron-builder": "^26.18.0",
+    "flag-icons": "^7.6.0",
+    "playwright-core": "^1.65.0",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2",
+    "world-countries": "^5.1.0"
+  },
+  "scripts": {
+    "postinstall": "node scripts/build-data.mjs",
+    "start": "electron .",
+    "build:data": "node scripts/build-data.mjs",
+    "build:fonts": "python3 scripts/subset-fonts.py",
+    "build:voice": "python3 scripts/gen-voice.py",
+    "dist": "electron-builder --linux deb --win nsis portable",
+    "dist:linux": "electron-builder --linux deb",
+    "dist:win": "electron-builder --win nsis portable"
+  },
+  "build": {
+    "appId": "org.shoukugames.geograsp",
+    "productName": "GeoGrasp",
+    "copyright": "Copyright © 2026 Shawn Rapaz",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build-res"
+    },
+    "files": [
+      "electron/**",
+      "app/**",
+      "build-res/icon.png",
+      "LICENSE",
+      "package.json"
+    ],
+    "asar": true,
+    "asarUnpack": [],
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Education;Game",
+      "icon": "build-res/icon.png",
+      "synopsis": "Hand-tracking world map puzzle for kids (EN/JA)",
+      "description": "GeoGrasp is a geography puzzle game for children aged 6 and up. Use your hands in front of the camera (100% offline, nothing recorded) or the mouse to pick up countries and continents and place them on the world map. English and Japanese.",
+      "maintainer": "Shawn Rapaz <info@shoukugames.org>",
+      "vendor": "Shouku Games",
+      "syncDesktopName": true
+    },
+    "deb": {
+      "artifactName": "${name}_${version}_${arch}.deb",
+      "packageCategory": "games",
+      "priority": "optional"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build-res/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "GeoGrasp-Setup-${version}.exe",
+      "license": "LICENSE",
+      "shortcutName": "GeoGrasp",
+      "installerIcon": "build-res/icon.ico",
+      "uninstallerIcon": "build-res/icon.ico"
+    },
+    "portable": {
+      "artifactName": "GeoGrasp-${version}-portable.exe"
+    },
+    "publish": null
+  },
+  "desktopName": "geograsp.desktop"
+}
