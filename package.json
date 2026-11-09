@@ -1,7 +1,7 @@
 {
   "name": "geograsp",
   "productName": "GeoGrasp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Hand-tracking world geography puzzle game for kids (ages 6+). English & Japanese.",
   "main": "electron/main.js",
   "author": {

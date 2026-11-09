@@ -2,6 +2,14 @@
 
 All notable changes to GeoGrasp are documented here. This project uses [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] — 2026-11-09
+
+### Changed
+- The game no longer asks for parent authorization at startup. It always starts in mouse mode, so
+  children can play straight away with the mouse.
+- The parent check and camera consent dialog now appear only when the player selects
+  **Control → Hands (camera)**. Cancelling keeps the game on the mouse.
+
 ## [0.1.0] — 2026-11-09
 
 First release.

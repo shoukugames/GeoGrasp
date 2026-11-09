@@ -1,4 +1,4 @@
-// GeoGrasp v0.1.0 — app controller
+// GeoGrasp v0.1.1 — app controller
 // Copyright (C) 2026 Shawn Rapaz — GNU GPL v3.0 or later. Made with Claude Code.
 /* global d3 */
 import { t, setLang, getLang, onLang, applyI18n } from './i18n.js';
@@ -484,11 +484,9 @@ async function boot() {
 
   setControl(settings.camera === true && settings.control !== 'mouse' ? 'hands' : 'mouse', false);
   if (settings.camera === true && settings.control !== 'mouse') startCamera();
-  setTimeout(() => {
-    audio.say('welcome', '');
-    // First launch: ask a grown-up about the camera.
-    if (settings.camera === null) requestCamera().then((ok) => { if (!ok) setControl('mouse', false); });
-  }, 700);
+  // The game always starts playable with the mouse. A grown-up is only asked
+  // about the camera when the player chooses Control → Hands (camera).
+  setTimeout(() => audio.say('welcome', ''), 700);
 }
 
 boot();

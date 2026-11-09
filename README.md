@@ -7,7 +7,7 @@ device's video camera, GeoGrasp follows the player's hand so they can **pinch** 
 like a country, carry it through the air and drop it in the right place on the world map. Every
 country and capital is spoken aloud in a natural voice, in **English and Japanese**.
 
-- Version: **v0.1.0** (released 2026-11-09)
+- Version: **v0.1.1** (released 2026-11-09)
 - Created by **Shawn Rapaz** with **Claude Code**
 - Website: <https://shoukugames.org/> · Email: <info@shoukugames.org>
 - License: **GNU GPL v3.0** (see [LICENSE](LICENSE))
@@ -34,8 +34,12 @@ country and capital is spoken aloud in a natural voice, in **English and Japanes
 
 ## Privacy & the camera 🔒
 
-- The camera can only be switched on **after a parent / guardian passes a grown-up check and taps
-  "OK — allow camera"**. Parents can change this at any time in **For Parents**.
+- GeoGrasp **always starts in mouse mode** — nobody is asked anything at startup and children can
+  start playing straight away with the mouse / touchpad.
+- The camera is only requested when the player chooses **Control → ✋ Hands (camera)** on the title
+  screen. Then a parent / guardian must pass a grown-up check and tap **"OK — allow camera"**. If
+  they cancel or choose "Don't allow", the game simply stays on the mouse. Parents can change the
+  permission at any time in **For Parents**.
 - The video camera is **100% offline**. Every frame is analysed in memory on this computer and then
   discarded. **Nothing is recorded, saved or sent anywhere.** Only video is requested — never the microphone.
 - The camera **shuts off as soon as the game is closed** (and when you switch Control to *Mouse*).
@@ -48,7 +52,7 @@ country and capital is spoken aloud in a natural voice, in **English and Japanes
 ### Linux (Debian / Ubuntu) — `.deb`
 
 ```bash
-sudo apt install ./geograsp_0.1.0_amd64.deb
+sudo apt install ./geograsp_0.1.1_amd64.deb
 geograsp            # or launch "GeoGrasp" from the applications menu
 ```
 
@@ -56,8 +60,8 @@ Uninstall with `sudo apt remove geograsp`.
 
 ### Windows — `.exe`
 
-- **`GeoGrasp-Setup-0.1.0.exe`** — installer (Start-menu & desktop shortcuts, uninstaller).
-- **`GeoGrasp-0.1.0-portable.exe`** — runs without installing.
+- **`GeoGrasp-Setup-0.1.1.exe`** — installer (Start-menu & desktop shortcuts, uninstaller).
+- **`GeoGrasp-0.1.1-portable.exe`** — runs without installing.
 
 > The Windows builds are not code-signed yet, so SmartScreen may show *"Windows protected your PC"*.
 > Click **More info → Run anyway**.
@@ -66,10 +70,12 @@ Uninstall with `sudo apt remove geograsp`.
 
 1. Choose **English** or **日本語** (top right).
 2. Pick a **difficulty** (Easy / Medium / Hard) and a **map**, then press **▶ Play**.
-3. **With the camera:** hold your hand up so the little preview shows it. Move the white circle over a
+3. **With the mouse (default):** click and drag a piece onto the map — no setup needed.
+   **To use your hands instead:** choose **Control → ✋ Hands (camera)** on the title screen; a grown-up
+   answers a quick question and allows the camera.
+   **With the camera:** hold your hand up so the little preview shows it. Move the white circle over a
    piece, **pinch** your thumb and index finger together to grab it, move it over the map and **open
    your hand** to drop it.
-   **With the mouse:** click and drag the piece onto the map.
 4. In **Capital Cities**, point at a country and hold still for a moment (or pinch / click).
 5. Press **🔊** (or `R`) to hear the voice again, `Esc` to pause, `F11` for fullscreen.
 
@@ -85,8 +91,8 @@ npm start            # run the game
 ### Release packages
 
 ```bash
-npm run dist:linux   # dist/geograsp_0.1.0_amd64.deb
-npm run dist:win     # dist/GeoGrasp-Setup-0.1.0.exe + dist/GeoGrasp-0.1.0-portable.exe (needs Wine on Linux)
+npm run dist:linux   # dist/geograsp_0.1.1_amd64.deb
+npm run dist:win     # dist/GeoGrasp-Setup-0.1.1.exe + dist/GeoGrasp-0.1.1-portable.exe (needs Wine on Linux)
 npm run dist         # both
 ```
 

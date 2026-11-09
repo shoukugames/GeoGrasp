@@ -10,7 +10,7 @@ Thank you for helping make GeoGrasp better! 🌍🧩
 ## Before you report
 
 1. Check that you are running the latest version (the version number is shown on the title
-   screen tile **Credits** and in the Credits panel — currently **v0.1.0**).
+   screen tile **Credits** and in the Credits panel — currently **v0.1.1**).
 2. Try restarting the game.
 3. If the problem is about the camera / hand tracking, try switching **Control → Mouse** and back
    to **Hands** on the title screen, and make sure no other app (video call, etc.) is using the camera.
@@ -20,7 +20,7 @@ Thank you for helping make GeoGrasp better! 🌍🧩
 Copy this template into your email and fill it in:
 
 ```text
-GeoGrasp version: v0.1.0
+GeoGrasp version: v0.1.1
 Operating system:  (e.g. Windows 11, Ubuntu 24.04, Debian 12)
 Installed with:    (.deb / Setup .exe / portable .exe / from source)
 Language:          (English / 日本語)
