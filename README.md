@@ -47,6 +47,17 @@ country and capital is spoken aloud in a natural voice, in **English and Japanes
   the game itself. No ads, no accounts, no analytics.
 - Progress for the parents' dashboard is stored only on this computer.
 
+## Play in the browser
+
+GeoGrasp also runs in a web browser, on computers, phones and tablets, with nothing to
+install: <https://shoukugames.org/play/geograsp/> (test page). Play with the mouse, by touch,
+or with your hands through the camera (the browser asks first; hand tracking runs on your
+device and no image leaves it). Progress is saved in the browser.
+
+The web version is the `app/` folder after `npm install` (which builds `app/vendor`,
+`app/flags` and `app/data`). Serve or upload that folder as-is. Phones get the whole layout
+scaled to fit (`app/js/web-fit.js`); the Quit button is hidden in browsers.
+
 ## Install
 
 ### Linux (Debian / Ubuntu) — `.deb`

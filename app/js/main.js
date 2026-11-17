@@ -362,6 +362,8 @@ function wire() {
   $('#btn-parents').onclick = async () => { audio.sfx('click'); if (await parentGate()) { renderParents(); openModal('#panel-parents'); } };
   $('#btn-credits').onclick = () => { audio.sfx('click'); openModal('#panel-credits'); };
   $('#btn-quit').onclick = () => quitApp();
+  // In a web browser there is nothing to quit to (a page can't close its own tab).
+  if (!window.geograsp) $('#btn-quit').style.display = 'none';
   $('#btn-fullscreen').onclick = () => { if (window.geograsp) window.geograsp.toggleFullscreen(); else if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
   $$('[data-close]').forEach((b) => (b.onclick = () => { audio.sfx('click'); closeModals(); }));
   $('#modal-back').onclick = () => { if (!$('#panel-parents').classList.contains('hidden') || !$('#panel-credits').classList.contains('hidden')) closeModals(); };
