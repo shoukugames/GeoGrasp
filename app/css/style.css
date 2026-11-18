@@ -213,3 +213,6 @@ details summary { cursor: pointer; color: #1769b8; font-weight: 600; }
   .big-btn { padding: 10px; font-size: 24px; }
   .title-menu { gap: 10px; }
 }
+
+/* Touch screens: dragging a piece moves the piece instead of scrolling the page. */
+#stage-wrap, #stage, #hud, #tut-ui, #cursor-layer { touch-action: none; }
