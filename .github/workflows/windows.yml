@@ -4,8 +4,10 @@ name: Windows build
 #   - every push to main: the .exe is kept as a download on the run's page for 30 days
 #   - a tag such as v1.2.3: the .exe is also attached to that GitHub release
 #   - or start it by hand: Actions -> Windows build -> Run workflow
-# The .exe is not code-signed: building on GitHub doesn't sign it, so Windows SmartScreen can
-# still warn about it until a code-signing certificate is added.
+# The .exe is not code-signed, so Windows SmartScreen can warn about it.
+# It also builds a Microsoft Store package (<Game>-msix download). The Store signs it, so Store
+# installs get no SmartScreen warning. Before uploading it to Partner Center, put the app's
+# Product identity values into packaging/msix/store.json (see the note in that file).
 
 on:
   push:
@@ -48,6 +50,46 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      - name: Build the Microsoft Store package (MSIX)
+        run: |
+          python -m pip install --quiet pillow
+          python packaging/msix/make_msix.py --app dist/win-unpacked --icon "app/icon.png" --out dist-msix --version "$(node -p "require('./package.json').version")"
+      - name: Test the MSIX (install it and start the game)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $store = Get-Content packaging/msix/store.json -Raw | ConvertFrom-Json
+          $signtool = (Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\10.*\x64\signtool.exe' | Sort-Object FullName | Select-Object -Last 1).FullName
+          $cert = New-SelfSignedCertificate -Type Custom -Subject $store.publisher -KeyUsage DigitalSignature -CertStoreLocation Cert:\CurrentUser\My -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
+          $pfx = Join-Path $env:RUNNER_TEMP 'test.pfx'; $cer = Join-Path $env:RUNNER_TEMP 'test.cer'
+          Export-PfxCertificate -Cert $cert -FilePath $pfx -Password (ConvertTo-SecureString 'test' -Force -AsPlainText) | Out-Null
+          Export-Certificate -Cert $cert -FilePath $cer | Out-Null
+          Import-Certificate -FilePath $cer -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
+          $test = Join-Path $env:RUNNER_TEMP 'test.msix'; Copy-Item $env:MSIX $test
+          & $signtool sign /fd SHA256 /f $pfx /p test $test | Out-Null
+          if ($LASTEXITCODE) { throw 'signtool could not sign the test copy' }
+          Add-AppxPackage -Path $test
+          $pkg = Get-AppxPackage -Name $store.identity_name
+          $env:SDL_AUDIODRIVER = 'dummy'   # the build machine has no sound card
+          $alias = Join-Path $env:LOCALAPPDATA ('Microsoft\WindowsApps\' + $store.alias)
+          if (Test-Path $alias) { Start-Process -FilePath $alias } else { Start-Process explorer.exe ('shell:AppsFolder\' + $pkg.PackageFamilyName + '!App') }
+          Start-Sleep -Seconds 30
+          $procs = @(Get-Process -Name ([IO.Path]::GetFileNameWithoutExtension($env:MSIX_EXE)) -ErrorAction SilentlyContinue)
+          $titles = ($procs | ForEach-Object MainWindowTitle | Where-Object { $_ }) -join ' | '
+          if ($procs.Count -eq 0) { throw 'The game was not running 30 s after starting it from the MSIX' }
+          if ($titles -match 'exception|error|failed|traceback') { throw "The game shows an error window: $titles" }
+          Write-Output "::notice title=MSIX test::installed and running ($($procs.Count) process(es)), window: $titles"
+          $procs | Stop-Process -Force -ErrorAction SilentlyContinue
+          Start-Sleep -Seconds 2
+          Remove-AppxPackage -Package $pkg.PackageFullName
+      - name: Show the MSIX
+        run: echo "::notice title=Built $(basename "$MSIX")::$(du -h "$MSIX" | cut -f1), sha256 $(sha256sum "$MSIX" | cut -d' ' -f1)"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: GeoGrasp-msix
+          path: dist-msix/*.msix
+          if-no-files-found: error
+          retention-days: 30
       - name: Attach to the release
         if: startsWith(github.ref, 'refs/tags/v')
         env:

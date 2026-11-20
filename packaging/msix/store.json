@@ -1,0 +1,14 @@
+{
+ "_note": "Replace identity_name, publisher and publisher_display_name with the values from Partner Center (Product management -> Product identity) before uploading to the Microsoft Store.",
+ "identity_name": "ShoukuGames.GeoGrasp",
+ "publisher": "CN=ShoukuGamesPlaceholder",
+ "publisher_display_name": "Shouku Games",
+ "display_name": "GeoGrasp",
+ "description": "Pinch country-shaped puzzle pieces out of the air with your camera and drop them on the world map! Hear every country, then learn capitals, continents and flags.",
+ "file_name": "GeoGrasp",
+ "exe_name": "GeoGrasp.exe",
+ "alias": "shouku-geograsp.exe",
+ "device_capabilities": [
+  "webcam"
+ ]
+}
