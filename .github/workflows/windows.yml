@@ -27,8 +27,8 @@ jobs:
       PYGAME_HIDE_SUPPORT_PROMPT: "1"
       CSC_IDENTITY_AUTO_DISCOVERY: "false"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: "20"
       - name: Build
@@ -40,7 +40,7 @@ jobs:
           for f in dist/*.exe; do
             echo "::notice title=Built $(basename "$f")::$(du -h "$f" | cut -f1), sha256 $(sha256sum "$f" | cut -d' ' -f1)"
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: GeoGrasp-windows
           path: |
